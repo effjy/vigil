@@ -1,0 +1,34 @@
+# Continuous, inotify-driven monitoring of one tree. JSON events go to the
+# journal (one JSON object per line), ready for `journalctl -u vigil-watch@etc`
+# or shipping to a SIEM.
+#
+#   sudo install -Dm644 systemd/vigil-watch@.service /etc/systemd/system/vigil-watch@.service
+#   sudoedit /etc/vigil/etc.conf
+#   sudo systemctl enable --now vigil-watch@etc.service
+#
+# Needs only the PUBLIC key — no secret, no passphrase.
+[Unit]
+Description=vigil live integrity monitor (%i)
+Documentation=man:vigil(1)
+After=local-fs.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/vigil/%i.conf
+ExecStart=/usr/local/bin/vigil watch ${VIGIL_PATH} -p ${VIGIL_PUB} -d ${VIGIL_DB} --json --resweep 900
+Restart=on-failure
+RestartSec=5
+Nice=10
+
+# Hardening: read-only view of the system; no network needed.
+ProtectSystem=strict
+ReadOnlyPaths=/
+ProtectHome=read-only
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX
+
+[Install]
+WantedBy=multi-user.target
