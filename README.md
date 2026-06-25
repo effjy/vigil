@@ -1,6 +1,6 @@
 <div align="center">
 
-# Vigil
+<a href="https://github.com/effjy/vigil/"><img src="titles/vigil-title.svg" height="52" alt="Vigil"></a>
 
 [![Version](https://img.shields.io/badge/version-1.0.8-39ff14.svg?style=flat-square)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00e5ff.svg?style=flat-square)](LICENSE)
