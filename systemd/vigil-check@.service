@@ -1,0 +1,33 @@
+# Periodic integrity check of one tree. The instance name selects a config
+# file, e.g. `systemctl start vigil-check@etc` reads /etc/vigil/etc.conf.
+#
+#   sudo install -Dm644 systemd/vigil-check@.service /etc/systemd/system/vigil-check@.service
+#   sudo install -Dm644 systemd/vigil-check@.timer   /etc/systemd/system/vigil-check@.timer
+#   sudoedit /etc/vigil/etc.conf            # see systemd/example.conf
+#   sudo systemctl enable --now vigil-check@etc.timer
+#
+# Monitoring needs only the PUBLIC key, so no secret/passphrase is required here.
+[Unit]
+Description=vigil integrity check (%i)
+Documentation=man:vigil(1)
+After=local-fs.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/vigil/%i.conf
+ExecStart=/usr/local/bin/vigil check ${VIGIL_PATH} -p ${VIGIL_PUB} -d ${VIGIL_DB} --json
+# 0 = clean, 2 = drift, 4 = bad signature. Treat drift/bad-sig as failures so
+# `systemctl` and OnFailure= alerting fire, but don't crash-loop the unit.
+SuccessExitStatus=0
+Nice=10
+IOSchedulingClass=idle
+
+# Hardening: this only reads the tree and the public baseline.
+ProtectSystem=strict
+ReadOnlyPaths=/
+ProtectHome=read-only
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX

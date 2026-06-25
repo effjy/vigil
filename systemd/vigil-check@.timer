@@ -1,0 +1,16 @@
+# Runs vigil-check@%i.service on a schedule. Default: hourly, plus shortly
+# after boot. Override per instance with a drop-in:
+#   systemctl edit vigil-check@etc.timer
+[Unit]
+Description=Schedule vigil integrity check (%i)
+Documentation=man:vigil(1)
+
+[Timer]
+OnBootSec=2min
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=120
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target
