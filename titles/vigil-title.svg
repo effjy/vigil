@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="259" height="96" viewBox="0 0 259 96" role="img" aria-label="Vigil">
+  <title>Vigil</title>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00FFCC"/>
+      <stop offset="55%" stop-color="#1FB6FF"/>
+      <stop offset="100%" stop-color="#8A2BE2"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <g fill="url(#g)" filter="url(#glow)">
+    <path d="M452 0 L452 0 L35 720 L130 720 L499 79 L867 720 L962 720 L546 0 L452 0 Z" transform="translate(36.00,70.0) scale(0.05104,-0.05104)"/>
+    <path d="M66 0 L66 720 L148 720 L148 0 L66 0 Z" transform="translate(95.19,70.0) scale(0.05104,-0.05104)"/>
+    <path d="M176 0 Q143 0 115 16 Q88 32 72 59 Q56 87 56 120 L56 600 Q56 633 72 660 Q88 688 115 704 Q143 720 176 720 L656 720 Q689 720 716 704 Q744 688 760 660 Q776 633 776 600 L776 571 L695 571 L695 600 Q695 616 683 627 Q672 639 656 639 L176 639 Q160 639 148 627 Q137 616 137 600 L137 120 Q137 104 148 92 Q160 81 176 81 L656 81 Q672 81 683 92 Q695 104 695 120 L695 298 L517 298 L517 380 L776 380 L776 120 Q776 87 760 59 Q744 32 716 16 Q689 0 656 0 L176 0 Z" transform="translate(114.11,70.0) scale(0.05104,-0.05104)"/>
+    <path d="M66 0 L66 720 L148 720 L148 0 L66 0 Z" transform="translate(164.47,70.0) scale(0.05104,-0.05104)"/>
+    <path d="M57 0 L57 721 L138 721 L138 81 L777 81 L777 0 L57 0 Z" transform="translate(183.39,70.0) scale(0.05104,-0.05104)"/>
+  </g>
+</svg>
