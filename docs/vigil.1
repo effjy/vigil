@@ -1,0 +1,108 @@
+.TH VIGIL 1 "2026" "vigil 1.0.8" "User Commands"
+.SH NAME
+vigil \- post-quantum file-integrity monitor
+.SH SYNOPSIS
+.B vigil keygen
+.RI [ -a\ ALG ]
+.RI [ -k\ vigil.key ]
+.RI [ -p\ vigil.pub ]
+.br
+.B vigil baseline
+.I path
+.RI [ -k\ vigil.key ]
+.RI [ -o\ baseline.vgl ]
+.RI [ --prev\ OLD.vgl ]
+.RI [ --prev-pub\ OLD.pub ]
+.RI [ -x\ GLOB\ ... ]
+.RI [ --exclude-from\ FILE ]
+.RI [ -j\ N ]
+.RI [ --one-file-system ]
+.RI [ --follow-symlinks ]
+.br
+.B vigil check
+.RI [ path ]
+.RI [ -p\ vigil.pub ]
+.RI [ -d\ baseline.vgl ]
+.RI [ -j\ N ]
+.RI [ --quiet ]
+.RI [ --json ]
+.br
+.B vigil watch
+.RI [ path ]
+.RI [ -p\ vigil.pub ]
+.RI [ -d\ baseline.vgl ]
+.RI [ --json ]
+.RI [ --resweep\ S ]
+.RI [ --debounce\ MS ]
+.br
+.B vigil verify
+.RI [ -p\ vigil.pub ]
+.RI [ -d\ baseline.vgl ]
+.br
+.B vigil show
+.RI [ -d\ baseline.vgl ]
+.RI [ --list ]
+.SH DESCRIPTION
+.B vigil
+records a SHA3-512 fingerprint and the metadata (type, mode, owner, size,
+mtime) of every object under a directory tree, and seals the resulting baseline
+with a post-quantum ML-DSA (FIPS 204) signature. A later
+.B check
+re-scans the tree and reports exactly what was added, removed or modified, and
+refuses to trust a baseline whose signature does not verify.
+.PP
+.B vigil watch
+adds an inotify watch to the tree and reports drift live until interrupted.
+Both
+.B check
+and
+.B watch
+accept
+.B --json
+for machine-readable output (a single object for
+.BR check ,
+newline-delimited objects for
+.BR watch )
+and need only the public key, never the secret.
+.PP
+Paths may be excluded at
+.B baseline
+time with
+.B -x
+.IR GLOB " (repeatable) or "
+.B --exclude-from
+.IR FILE " (one pattern per line). A pattern without a slash matches any path "
+component (so
+.I *.log
+or
+.I cache
+match anywhere); a pattern with a slash matches the full relative path or any
+ancestor prefix. Matched directories are pruned. The exclude set is stored in
+the signed baseline, so
+.B check
+and
+.B watch
+apply it automatically and identically.
+.PP
+The secret signing key is encrypted at rest with Argon2id and AES-256-GCM. Set
+.B VIGIL_PASSPHRASE
+in the environment to operate
+.B baseline
+and
+.B keygen
+non-interactively.
+.SH EXIT STATUS (check)
+.TP
+.B 0
+Clean: the tree matches the signed baseline.
+.TP
+.B 2
+Drift: one or more objects changed.
+.TP
+.B 4
+Bad signature: the baseline was tampered with or signed by another key.
+.TP
+.B 1
+Usage or runtime error.
+.SH AUTHOR
+Jean-Francois Lachance-Caumartin.
