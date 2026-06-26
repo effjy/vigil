@@ -1,19 +1,26 @@
 <div align="center">
 
-<a href="https://github.com/effjy/vigil/"><img src="titles/vigil-title.svg" height="52" alt="Vigil"></a>
+# Vigil
 
 [![Version](https://img.shields.io/badge/version-1.0.8-39ff14.svg?style=flat-square)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00e5ff.svg?style=flat-square)](LICENSE)
 [![Language: C++17](https://img.shields.io/badge/language-C%2B%2B17-00599C.svg?style=flat-square&logo=cplusplus&logoColor=white)](https://en.cppreference.com/)
-[![Interface: CLI](https://img.shields.io/badge/interface-CLI-555.svg?style=flat-square)](#usage)
+[![Interface: CLI + GUI](https://img.shields.io/badge/interface-CLI%20%2B%20GUI-555.svg?style=flat-square)](#graphical-front-end)
 [![Platform: Linux](https://img.shields.io/badge/platform-Linux-FCC624.svg?style=flat-square&logo=linux&logoColor=black)](https://www.kernel.org/)
 [![Signatures: ML-DSA / FIPS 204](https://img.shields.io/badge/signatures-ML--DSA%20(FIPS%20204)-8a2be2.svg?style=flat-square)](https://csrc.nist.gov/pubs/fips/204/final)
 [![Hash: SHA3-512](https://img.shields.io/badge/hash-SHA3--512-blueviolet.svg?style=flat-square)](https://csrc.nist.gov/pubs/fips/202/final)
 [![KDF: Argon2id](https://img.shields.io/badge/KDF-Argon2id-orange.svg?style=flat-square)](https://www.rfc-editor.org/rfc/rfc9106.html)
 [![Build: make](https://img.shields.io/badge/build-make-427819.svg?style=flat-square&logo=gnu)](https://www.gnu.org/software/make/)
 [![Post-Quantum](https://img.shields.io/badge/security-Post--Quantum-teal.svg?style=flat-square)](https://openquantumsafe.org/)
+[![GitHub](https://img.shields.io/badge/GitHub-effjy%2Fvigil-181717.svg?style=flat-square&logo=github)](https://github.com/effjy/vigil)
+[![GUI: GTK4](https://img.shields.io/badge/GUI-GTK4-4A90D9.svg?style=flat-square&logo=gnome&logoColor=white)](#graphical-front-end)
+[![Stars](https://img.shields.io/badge/stars-%E2%98%85-FFD700.svg?style=flat-square&logo=github)](https://github.com/effjy/vigil/stargazers)
+[![Issues](https://img.shields.io/badge/issues-welcome-00e5ff.svg?style=flat-square&logo=github)](https://github.com/effjy/vigil/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-39ff14.svg?style=flat-square)](https://github.com/effjy/vigil/pulls)
 
 **A post-quantum file-integrity monitor for Linux — know exactly what changed, and prove the record wasn't touched.**
+
+<img src="screenshot.png" alt="Vigil" width="820">
 
 </div>
 
@@ -37,6 +44,7 @@ steals `vigil.key` still cannot forge a baseline.
 - [Building](#building)
 - [Installing globally](#installing-globally)
 - [Quick start](#quick-start)
+- [Graphical front-end](#graphical-front-end)
 - [Command reference](#command-reference)
 - [Exit codes](#exit-codes)
 - [Live monitoring in depth](#live-monitoring-in-depth)
@@ -135,8 +143,12 @@ pkg-config --exists liboqs openssl libargon2 && echo "all dependencies found"
 ```sh
 git clone https://github.com/effjy/vigil
 cd vigil
-make            # produces ./vigil
+make            # produces ./vigil (CLI) and ./vigil-gui (GTK4 GUI)
 ```
+
+> The GUI needs **GTK4** (`libgtk-4-dev` on Debian/Ubuntu, `gtk4-devel` on
+> Fedora). It links only against GTK — none of the crypto libraries — because it
+> drives the `vigil` binary rather than reimplementing it.
 
 Optional: build and run the end-to-end test suite (creates throwaway keys and
 trees in a temp dir, exercises drift, tamper, watch, chaining, JSON, …):
@@ -150,13 +162,16 @@ Other targets: `make clean` removes build artifacts.
 ## Installing globally
 
 ```sh
-sudo make install            # installs to /usr/local/bin/vigil (+ man page)
+sudo make install            # installs vigil + vigil-gui, the icon, desktop
+                             # entry and man page (to /usr/local by default)
 ```
 
-Then `vigil` is on your `PATH`:
+Then `vigil` is on your `PATH`, **Vigil** appears in your application menu (with
+its icon in the taskbar), and the man page is available:
 
 ```sh
 vigil version
+vigil-gui          # or launch "Vigil" from the application menu
 man vigil
 ```
 
@@ -213,6 +228,38 @@ A typical drift report:
 
 `+` added · `-` removed · `~` modified, with the changed attributes in
 parentheses (`content`, `mode`, `uid`, `gid`, `size`, `mtime`, `type`).
+
+## Graphical front-end
+
+Vigil ships with **`vigil-gui`**, a GTK4 desktop front-end that drives the exact
+same `vigil` binary — anything the GUI does, the CLI does, so the two never drift
+apart. It exposes every operation as a tab:
+
+- **Keygen** — create a passphrase-protected ML-DSA keypair.
+- **Baseline** — pick a directory, key and output file (plus optional exclude
+  globs) and record a signed baseline.
+- **Check** — one-shot drift report against a baseline (public key only).
+- **Watch** — live, incremental `inotify` monitoring with drift events streamed
+  into the activity log as they happen.
+- **Inspect** — verify a baseline's signature or show its contents.
+
+Command output streams live into a colorized activity log, and the exit code is
+surfaced as a clear status (clean / drift / bad signature).
+
+**Minimize to tray for long watches.** When a system tray is present, closing or
+minimizing the window sends Vigil to the tray (via the StatusNotifierItem
+protocol — no extra dependency) so a `watch` keeps running in the background.
+Click the tray icon, or its **Show Vigil** menu entry, to bring the window back;
+**Quit Vigil** stops everything.
+
+```sh
+make                 # builds both ./vigil and ./vigil-gui
+sudo make install    # installs both, plus the icon and a desktop entry
+```
+
+After `sudo make install`, launch **Vigil** from your application menu (the
+launcher runs `vigil-gui` and shows the Vigil icon in the taskbar); the
+command-line tool remains available as `vigil`.
 
 ## Command reference
 

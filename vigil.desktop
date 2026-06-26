@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Vigil
+GenericName=File-Integrity Monitor
+Comment=Post-quantum file-integrity monitor — baseline, check and watch directory trees
+Exec=vigil-gui
+Icon=vigil
+Terminal=false
+Type=Application
+Categories=System;Security;Utility;GTK;
+StartupNotify=true
+StartupWMClass=vigil
+Keywords=integrity;baseline;tamper;monitor;inotify;hash;sha3;post-quantum;ml-dsa;security;
