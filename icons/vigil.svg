@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="35%" cy="25%" r="95%">
+      <stop offset="0%" stop-color="#16202a"/>
+      <stop offset="55%" stop-color="#0d0f14"/>
+      <stop offset="100%" stop-color="#080a0d"/>
+    </radialGradient>
+    <linearGradient id="shield" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#123026"/>
+      <stop offset="100%" stop-color="#0a141a"/>
+    </linearGradient>
+    <linearGradient id="iris" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#39ff14"/>
+      <stop offset="100%" stop-color="#00e5ff"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#39ff14" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#39ff14" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- rounded tile -->
+  <rect x="8" y="8" width="240" height="240" rx="52" fill="url(#bg)"
+        stroke="#39ff14" stroke-opacity="0.22" stroke-width="2"/>
+
+  <!-- shield body -->
+  <path d="M128 36 L200 62 V132 C200 178 168 208 128 224 C88 208 56 178 56 132 V62 Z"
+        fill="url(#shield)" stroke="#39ff14" stroke-opacity="0.55" stroke-width="2.5"/>
+
+  <!-- soft glow behind the eye -->
+  <circle cx="128" cy="128" r="58" fill="url(#glow)"/>
+
+  <!-- the watchful eye (vigilance) -->
+  <path d="M70 128 C92 96 164 96 186 128 C164 160 92 160 70 128 Z"
+        fill="#0a141a" stroke="#00e5ff" stroke-opacity="0.85" stroke-width="4"/>
+  <circle cx="128" cy="128" r="26" fill="url(#iris)"/>
+  <circle cx="128" cy="128" r="11" fill="#06120c"/>
+  <!-- catch-light -->
+  <circle cx="120" cy="120" r="5" fill="#eafff0" fill-opacity="0.9"/>
+
+  <!-- scan line crossing the iris (the "monitor") -->
+  <line x1="70" y1="128" x2="186" y2="128" stroke="#39ff14" stroke-opacity="0.35"
+        stroke-width="2" stroke-dasharray="6 7"/>
+
+  <!-- integrity check mark at the shield foot -->
+  <path d="M104 196 l14 14 30 -34" fill="none" stroke="#39ff14"
+        stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
